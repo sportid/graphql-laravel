@@ -102,6 +102,9 @@ class GraphQL {
             $errorFormatter = config('graphql.error_formatter', ['\Rebing\GraphQL', 'formatError']);
 
             $data['errors'] = array_map($errorFormatter, $executionResult->errors);
+            $data['queryData']['query'] = $query;
+            $data['queryData']['params'] = $params;
+            $data['queryData']['opts'] = $opts;
         }
 
         return $data;

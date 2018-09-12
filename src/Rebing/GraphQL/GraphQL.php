@@ -97,14 +97,19 @@ class GraphQL {
         ];
 
         // Add errors
-        if( ! empty($executionResult->errors))
-        {
+        if( ! empty($executionResult->errors)) {
             $errorFormatter = config('graphql.error_formatter', ['\Rebing\GraphQL', 'formatError']);
+            $logQuery       = config('graphql.log_query', ['\Rebing\GraphQL', 'logQuery']);
 
             $data['errors'] = array_map($errorFormatter, $executionResult->errors);
-            $data['queryData']['query'] = $query;
-            $data['queryData']['params'] = $params;
-            $data['queryData']['opts'] = $opts;
+
+            $queryData = [];
+
+            $queryData['query'] = $query;
+            $queryData['params'] = $params;
+            $queryData['opts'] = $opts;
+
+            $data['queryData'] = array_map($logQuery, $queryData);
         }
 
         return $data;
